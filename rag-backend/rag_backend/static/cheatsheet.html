@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Levenshtein and LCS</title>
+<script>
+// Levenshtein Distance 계산 함수
+function calculateLevenshteinDistance(str1, str2) {
+    const track = Array(str2.length + 1).fill(null).map(() =>
+        Array(str1.length + 1).fill(null));
+    for (let i = 0; i <= str1.length; i += 1) {
+        track[0][i] = i;
+    }
+    for (let j = 0; j <= str2.length; j += 1) {
+        track[j][0] = j;
+    }
+    for (let j = 1; j <= str2.length; j += 1) {
+        for (let i = 1; i <= str1.length; i += 1) {
+            const indicator = str1[i - 1] === str2[j - 1] ? 0 : 1;
+            track[j][i] = Math.min(
+                track[j][i - 1] + 1, // deletion
+                track[j - 1][i] + 1, // insertion
+                track[j - 1][i - 1] + indicator, // substitution
+            );
+        }
+    }
+    return track[str2.length][str1.length];
+}
+
+// LCS 계산 함수
+function calculateLCS(str1, str2) {
+    const matrix = Array(str2.length + 1).fill(null).map(() => Array(str1.length + 1).fill(0));
+
+    for (let i = 1; i <= str2.length; i++) {
+        for (let j = 1; j <= str1.length; j++) {
+            if (str2[i - 1] === str1[j - 1]) {
+                matrix[i][j] = matrix[i - 1][j - 1] + 1;
+            } else {
+                matrix[i][j] = Math.max(matrix[i - 1][j], matrix[i][j - 1]);
+            }
+        }
+    }
+
+    return matrix[str2.length][str1.length];
+}
+
+// 2-gram 생성 함수
+function createBigrams(text) {
+    const bigrams = new Set();
+    for (let i = 0; i < text.length - 1; i++) {
+        bigrams.add(text.substring(i, i + 2));
+    }
+    return bigrams;
+}
+
+// 2-gram 유사도 계산 함수
+function calculateBigramSimilarity(str1, str2) {
+    const bigrams1 = createBigrams(str1);
+    const bigrams2 = createBigrams(str2);
+    const intersection = new Set([...bigrams1].filter(x => bigrams2.has(x)));
+    return intersection.size / Math.min(bigrams1.size, bigrams2.size); // 유사도 계산
+}
+
+// 결과를 화면에 출력하는 함수
+function displayResults() {
+    const str1 = document.getElementById('text1').value;
+    const results = [];
+
+    for (let i = 2; i <= 5; i++) {
+        const strOther = document.getElementById(`text${i}`).value;
+        const levenshteinDistance = calculateLevenshteinDistance(str1, strOther);
+        const lcsLength = calculateLCS(str1, strOther);
+        const bigramSimilarity = calculateBigramSimilarity(str1, strOther);
+        results.push(`기준모델 vs Text ${i}: Levenshtein Distance = ${levenshteinDistance}, LCS Length = ${lcsLength}, 2-gram Similarity = ${bigramSimilarity.toFixed(2)}`);
+    }
+
+    document.getElementById('results').innerHTML = results.join('<br>');
+}
+</script>
+</head>
+<body>
+<h2>Levenshtein Distance and LCS Calculator for Multiple Comparisons</h2>
+<div>
+    <label for="text1">기준:</label>
+    <input type="text" id="text1" style="width: 1000px"/>
+</div>
+<div style="margin-top: 10px">
+    <label for="text2">모델 1:</label>
+    <input type="text" id="text2" style="width: 1000px"/>
+</div>
+<div style="margin-top: 10px">
+    <label for="text3">모델 2:</label>
+    <input type="text" id="text3" style="width: 1000px"/>
+</div>
+<div style="margin-top: 10px">
+    <label for="text4">모델 3:</label>
+    <input type="text" id="text4" style="width: 1000px"/>
+</div>
+<div style="margin-top: 10px">
+    <label for="text5">모델 4:</label>
+    <input type="text" id="text5" style="width: 1000px"/>
+</div>
+<button onclick="displayResults()" style="margin-top: 10px">Calculate</button>
+<div style="margin-top: 10px">레벤슈타인 거리가 짧을수록 가깝고, LCS가 클수록 가깝습니다.</div>
+<div id="results" style="margin-top: 10px"></div>
+</body>
+</html>

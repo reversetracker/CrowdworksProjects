@@ -1,0 +1,22 @@
+external-nginx:
+  controller:
+    ingressClass: external-nginx  # 수정된 ingressClass
+    config:
+      proxy-body-size: "3m"
+    service:
+      targetPorts:
+        http: http
+        https: https
+      annotations:
+        service.beta.kubernetes.io/azure-load-balancer-internal: "false"
+        service.beta.kubernetes.io/azure-load-balancer-health-probe-request-path: "/healthz"  # 추가된 Health Probe 설정
+#    electionID: external-ingress-controller-leader  # 추가된 electionID
+#    ingressClassResource:
+#      name: nginx-external  # 수정된 name
+#      enabled: true  # 활성화 여부 추가
+#      default: false  # 기본값으로 설정하지 않음
+#      controllerValue: "k8s.io/external-ingress-nginx"  # controllerValue 추가
+
+#  tcp:
+#    9094: "kafka/kafka-0-external:9094"  # kafka
+#    5432: "postgresql/postgresql:5432"  # postgresql

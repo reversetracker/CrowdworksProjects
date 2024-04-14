@@ -1,0 +1,22 @@
+internal-nginx:
+  controller:
+    ingressClass: internal-nginx
+    service:
+      targetPorts:
+        http: http
+        https: https
+      annotations:
+        # service.beta.kubernetes.io/aws-load-balancer-ssl-cert:
+        # arn:aws:acm:ap-northeast-2:576471727047:certificate/0a55d6bd-8174-43d0-ae2f-ab84e8087327
+
+        # service.beta.kubernetes.io/aws-load-balancer-backend-protocol specifies whether to use TLS
+        # for the backend traffic between the load balancer and the kubernetes pods.
+        service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "tcp"
+        # service.beta.kubernetes.io/aws-load-balancer-ssl-ports specifies the frontend ports with TLS listeners.
+        service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
+        # service.beta.kubernetes.io/aws-load-balancer-internal specifies
+        # whether the NLB will be internet-facing or internal.
+        service.beta.kubernetes.io/aws-load-balancer-internal: "true"
+    ingressClassResource:
+      # -- Name of the ingressClass
+      name: internal-nginx

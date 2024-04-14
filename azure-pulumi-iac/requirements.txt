@@ -1,0 +1,8 @@
+pulumi>=3.5.1,<4.0.0
+pulumi-azure-native>=2.0.0,<3.0.0
+pulumi-random>=4.2.0,<5.0.0
+pulumi-tls>=4.0.0,<5.0.0
+pulumi-azuread>=4.0.0,<5.0.0
+pulumi-kubernetes>=3.0.0,<4.0.0
+# https://www.pulumi.com/registry/packages/kubernetes/how-to-guides/aks/
+# https://github.com/Azure/k8s-best-practices/blob/master/Service-Principal-Names/expired-sp-password

@@ -1,0 +1,7 @@
+cert-manager:
+  ingressShim:
+    defaultIssuerName:  "external-nginx-letsencrypt-prod"
+    defaultIssuerKind:  "ClusterIssuer"
+    defaultIssuerGroup:  "cert-manager.io"
+
+  installCRDs: true

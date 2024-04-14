@@ -1,0 +1,9 @@
+config:
+  azure-native:location: KoreaCentral
+  nlp-aks:stack: dev
+  nlp-aks:location: KoreaCentral
+  nlp-aks:prefix: nlp-labs-dev
+  nlp-aks:node_1.size: Standard_B4als_v2
+  nlp-aks:node_1.count: "2"
+  nlp-aks:node_2.size: Standard_B4als_v2
+  nlp-aks:node_2.count: "2"
